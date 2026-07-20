@@ -150,9 +150,9 @@ AI-Minute/
 
 ## 👤 Author
 
-**Tasnim Alshair**
-
-AI Automation Engineer | AI & No-Code Automation Enthusiast
+**Tasnim Alshair**  
+AI Automation Engineer
+🔗 LinkedIn: [Tasnim Alshair](https://www.linkedin.com/in/tasnim-alshair-aa11a4266)
 
 ---
 
