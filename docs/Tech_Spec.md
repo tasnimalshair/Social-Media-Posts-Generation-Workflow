@@ -47,15 +47,27 @@ It:
 
 ```mermaid
 flowchart TD
-    A[Daily Trigger] --> B[AI Research]
-    B --> C[Topic Selection]
-    C --> D[Content Generation]
-    D --> E[Caption Generation]
-    E --> F[Telegram Approval]
-    F --> G[Canva Design]
-    G --> H[Design Approval]
-    H --> I[Publishing Queue]
-    I --> J[Instagram Publishing]
+
+    subgraph Research Phase
+        A[Daily Trigger] --> B[AI Research]
+        B --> C[Topic Selection]
+    end
+
+    subgraph Content Creation
+        C --> D[Content Generation]
+        D --> E[Caption Generation]
+        E --> F[Telegram Approval]
+    end
+
+    subgraph Design Phase
+        F --> G[Canva Design]
+        G --> H[Design Approval]
+    end
+
+    subgraph Publishing Phase
+        H --> I[Publishing Queue]
+        I --> J[Instagram Publishing]
+    end
 ```
 
 ---
