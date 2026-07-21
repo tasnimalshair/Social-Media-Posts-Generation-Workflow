@@ -45,53 +45,17 @@ It:
 
 # 4. High-Level Workflow
 
-```text
-Daily Trigger
-
-      │
-      ▼
-
-AI Research
-
-      │
-      ▼
-
-Topic Selection
-
-      │
-      ▼
-
-Content Generation
-
-      │
-      ▼
-
-Caption Generation
-
-      │
-      ▼
-
-Telegram Approval
-
-      │
-      ▼
-
-Canva Design
-
-      │
-      ▼
-
-Design Approval
-
-      │
-      ▼
-
-Publishing Queue
-
-      │
-      ▼
-
-Instagram Publishing
+```mermaid
+flowchart TD
+    A[Daily Trigger] --> B[AI Research]
+    B --> C[Topic Selection]
+    C --> D[Content Generation]
+    D --> E[Caption Generation]
+    E --> F[Telegram Approval]
+    F --> G[Canva Design]
+    G --> H[Design Approval]
+    H --> I[Publishing Queue]
+    I --> J[Instagram Publishing]
 ```
 
 ---
