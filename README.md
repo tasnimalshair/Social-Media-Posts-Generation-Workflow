@@ -33,36 +33,17 @@ The system automates the complete content creation pipeline by:
 
 ## ⚙️ High-Level Workflow
 
-```text
-Daily Trigger
-      │
-      ▼
-AI Research
-      │
-      ▼
-Topic Selection
-      │
-      ▼
-Content Generation
-      │
-      ▼
-Caption Generation
-      │
-      ▼
-Telegram Approval
-      │
-      ▼
-Canva Automation
-      │
-      ▼
-Design Approval
-      │
-      ▼
-Publishing Queue
-      │
-      ▼
-Instagram Publishing
-```
+flowchart TD
+    A[Daily Trigger]
+    --> B[AI Research]
+    --> C[Topic Selection]
+    --> D[Content Generation]
+    --> E[Caption Generation]
+    --> F[Telegram Approval]
+    --> G[Canva Automation]
+    --> H[Design Approval]
+    --> I[Publishing Queue]
+    --> J[Instagram Publishing]
 
 ---
 
