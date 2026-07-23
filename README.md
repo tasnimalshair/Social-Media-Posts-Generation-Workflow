@@ -33,6 +33,7 @@ The system automates the complete content creation pipeline by:
 
 ## ⚙️ High-Level Workflow
 
+```mermaid
 flowchart TD
     A[Daily Trigger]
     --> B[AI Research]
@@ -44,7 +45,7 @@ flowchart TD
     --> H[Design Approval]
     --> I[Publishing Queue]
     --> J[Instagram Publishing]
-
+```
 ---
 
 ## 🧩 System Components
