@@ -50,7 +50,7 @@ The automation is divided into several interconnected workflows:
 - Allows the user to approve the design or request changes
 - Continues to the publishing workflow only after design approval
 
-### 5. Instagram Scheduling And Publishing
+### 6. Instagram Scheduling And Publishing
 
 - Processes the approved content and visual assets
 - Prepares the final Instagram post
