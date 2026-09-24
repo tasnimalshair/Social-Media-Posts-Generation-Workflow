@@ -1,0 +1,1057 @@
+{
+  "name": "User Approval on Post Content-2",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -608,
+        -352
+      ],
+      "id": "bc6f8557-38f2-49e4-ae40-17206bf182b0",
+      "name": "Telegram Trigger",
+      "webhookId": "22a15e01-b875-4063-bafd-a2816222c89b",
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const message = $json.callback_query.message.text;\n\n\n// Extract sections\nfunction extractBetween(text, start, end) {\n  const startIndex = text.indexOf(start);\n  const endIndex = end ? text.indexOf(end) : text.length;\n\n  if (startIndex === -1) return \"\";\n\n  return text\n    .substring(\n      startIndex + start.length,\n      endIndex === -1 ? text.length : endIndex\n    )\n    .trim();\n}\n\n\n// Get Carousel section\nconst carousel = extractBetween(\n  message,\n  \"🎨 Carousel Slides\",\n  null\n);\n\n\n// Split slides\nconst slides = carousel\n  .split(\"━━━━━━━━━━━━━━━━━━\")\n  .map(s => s.trim())\n  .filter(Boolean);\n\n\n// Extract slide data\nfunction extractSlide(slide) {\n\n  const lines = slide\n    .split(\"\\n\")\n    .map(line => line.trim())\n    .filter(Boolean);\n\n\n  // Remove slide label\n  lines.shift();\n\n\n  return {\n    title: lines[0] || \"\",\n    body: lines.slice(1).join(\" \")\n  };\n}\n\n\nconst slide1 = extractSlide(slides[0]);\nconst slide2 = extractSlide(slides[1]);\nconst slide3 = extractSlide(slides[2]);\nconst slide4 = extractSlide(slides[3]);\nconst slide5 = extractSlide(slides[4]);\n\n\n// Return clean design JSON\n\nreturn [\n  {\n    json: {\n    post_id: $input.first().json.callback_query.data.split(\"_\")[1],\n      hook: slide1.title,\n\n      title_1: slide2.title,\n      body_1: slide2.body,\n\n      title_2: slide3.title,\n      body_2: slide3.body,\n\n      title_3: slide4.title,\n      body_3: slide4.body,\n\n      title_4: slide5.title,\n      body_4: slide5.body\n\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -336
+      ],
+      "id": "de5b9cf0-534e-4516-8d05-df4ef02308ed",
+      "name": "Post Content"
+    },
+    {
+      "parameters": {
+        "operation": "sendMediaGroup",
+        "chatId": "1206553714",
+        "media": {
+          "media": [
+            {
+              "media": "={{$json.media }}",
+              "additionalFields": {}
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1888,
+        -352
+      ],
+      "id": "873e5303-9de9-4b9d-bede-45f45c2c8faf",
+      "name": "Send a media group message",
+      "webhookId": "a6dac8b9-aa6a-439f-8eb7-3fdc279b4db2",
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.templated.io/v1/render",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization  ",
+              "value": "Bearer 48a22f8c-38f7-4a42-96fa-213823beabfd"
+            },
+            {
+              "name": "Content-Type  ",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template\": \"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\n  \"layers\": {\n    \"hook\": {\n      \"text\": \"={{$json.hook}}\"\n    },\n    \"title_1\": {\n      \"text\": \"{{$json.title_1}}\"\n    },\n    \"body_1\": {\n      \"text\": \"{{$json.body_1}}\"\n    },\n    \"title_2\": {\n      \"text\": \"{{$json.title_2}}\"\n    },\n    \"body_2\": {\n      \"text\": \"{{$json.body_2}}\"\n    },\n    \"title_3\": {\n      \"text\": \"{{$json.title_3}}\"\n    },\n    \"body_3\": {\n      \"text\": \"{{$json.body_3}}\"\n    },\n    \"title_4\": {\n      \"text\": \"={{$json.title_4}}\"\n    },\n    \"body_4\": {\n      \"text\": \"{{$json.body_4}}\"\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        -560
+      ],
+      "id": "5d3f6697-57ee-43e1-98c5-3fcb033490ec",
+      "name": "Send To Templated.io",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n    json: {\n      image: $json.image_url\n    }\n  }\n;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        -352
+      ],
+      "id": "e6d64933-a36c-4685-9052-d97e5f787276",
+      "name": "Get Images URLs"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $json.images.map(url => ({\n  type: \"photo\",\n  media: url\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        -352
+      ],
+      "id": "227eeaed-c0b6-4176-840f-6dd8faabfc6a",
+      "name": "Images URLs Ready For Sending"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e59ae9bf-db09-4726-b24c-deff11b9ed83",
+              "leftValue": "={{ $json.callback_query.data.split(\"_\")[0] }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        -352
+      ],
+      "id": "c412df05-d63b-4e44-b03f-ca972adcc014",
+      "name": "If approved?"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      id: \"a1e4f04c-536b-4911-8a7d-9023bae031e4\",\n      width: 1080,\n      height: 1080,\n      url: \"https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg\",\n      render_url: \"https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg\",\n      format: \"jpg\",\n      status: \"COMPLETED\",\n      page: \"slide-1\"\n    }\n  },\n  {\n    json: {\n      id: \"6ce879dd-0a78-425c-8a59-3c825f9d2bb7\",\n      width: 1080,\n      height: 1080,\n      url: \"https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg\",\n      render_url: \"https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg\",\n      format: \"jpg\",\n      status: \"COMPLETED\",\n      page: \"slide-2\"\n    }\n  },\n  {\n    json: {\n      id: \"d8012da1-8455-43da-983c-552a212bedb2\",\n      width: 1080,\n      height: 1080,\n      url: \"https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg\",\n      render_url: \"https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg\",\n      format: \"jpg\",\n      status: \"COMPLETED\",\n      page: \"slide-3\"\n    }\n  },\n  {\n    json: {\n      id: \"7b7f94e8-ee16-4990-8b6d-29db45b1d1fb\",\n      width: 1080,\n      height: 1080,\n      url: \"https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg\",\n      render_url: \"https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg\",\n      format: \"jpg\",\n      status: \"COMPLETED\",\n      page: \"slide-4\"\n    }\n  },\n  {\n    json: {\n      id: \"4f355147-2579-4c3f-b483-a29604808bd4\",\n      width: 1080,\n      height: 1080,\n      url: \"https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg\",\n      render_url: \"https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg\",\n      format: \"jpg\",\n      status: \"COMPLETED\",\n      page: \"slide-5\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -336
+      ],
+      "id": "696ee64b-e73c-4572-82ae-891c7b4172ac",
+      "name": "Post Slides Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "  return {\n      \"post_id\": $('Post Content').first().json.post_id,\n      \"slide_number\": Number($input.first().json.page.split(\"-\")[1]),\n      \"image_url\": $input.first().json.url\n  };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        -544
+      ],
+      "id": "c6aef2e0-0808-42ae-8cb0-ba7645c829b7",
+      "name": "Data to Insert"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -560
+      ],
+      "id": "798b2e9f-a457-4415-b556-53c41f836c0c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1152,
+        -368
+      ],
+      "id": "737a572f-2419-46bc-aa0e-f53e7b1e7885",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const images = items.map(item => item.json.image);\n\nreturn [\n  {\n    json: {\n      images\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        -352
+      ],
+      "id": "c75ad437-d3b1-467a-b3ff-504aaafd0fff",
+      "name": "Comine URLs in an Array"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "post_slides",
+          "mode": "list",
+          "cachedResultName": "post_slides"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $('Telegram Trigger').item.json.callback_query.data.split(\"_\")[1] }}",
+            "status": "approved"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "slide_number",
+              "displayName": "slide_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2496,
+        -480
+      ],
+      "id": "77c61f30-66b3-4d18-8c9e-eb50e9181b72",
+      "name": "Update Image Status To Approved",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e59ae9bf-db09-4726-b24c-deff11b9ed83",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        -368
+      ],
+      "id": "bcd8710d-d935-4f00-8655-9751770d0e57",
+      "name": "If approved?1"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "🎨 Design Preview Ready\n\nApprove this post?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "chatApproval": true,
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2080,
+        -352
+      ],
+      "id": "40cb2c8a-9337-4b28-848a-73bb766efde2",
+      "name": "Approve Post?",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "FsP0BLyr2ZxvYEUu",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/FsP0BLyr2ZxvYEUu",
+          "cachedResultName": "Publish or Schedule The Post- Sub-workflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $json.post_id }}"
+          },
+          "matchingColumns": [
+            "post_id_firstItem"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2720,
+        -480
+      ],
+      "name": "Call My Sub-workflow",
+      "id": "3fd1f2dd-58aa-476c-9553-af1e509eb85c",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "posts",
+          "mode": "list",
+          "cachedResultName": "posts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "approved",
+            "id": "={{ $json.callback_query.data.split(\"_\")[1] }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "caption",
+              "displayName": "caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "publish_at",
+              "displayName": "publish_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "instagram_post_id",
+              "displayName": "instagram_post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_id",
+              "displayName": "topic_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -224,
+        -512
+      ],
+      "id": "4a1fe1d8-400e-4eaf-a42f-a5c37cc72895",
+      "name": "Update The Post Status To Approved",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "post_slides",
+          "mode": "list",
+          "cachedResultName": "post_slides"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $json.post_id }}",
+            "slide_number": "={{ $json.slide_number }}",
+            "image_url": "={{ $json.image_url }}",
+            "status": "generated"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slide_number",
+              "displayName": "slide_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        896,
+        -544
+      ],
+      "id": "1df42517-8606-4e84-af96-0bca09add698",
+      "name": "Insert Post Slides",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Get User Approval\n",
+        "height": 480,
+        "width": 656,
+        "color": "#4C445F"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -672,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "0ef022e9-005c-492c-bb63-d052d1808dac",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Creating the Post's Sides \n",
+        "height": 512,
+        "width": 1056,
+        "color": "#5F7772"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "a3dbf46e-5e5c-41b5-9b01-d59b0447c2d9",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Sending the Slides Images to the User for Approval \n",
+        "height": 432,
+        "width": 1072,
+        "color": "#79717F"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1136,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "889b0481-8064-4eac-b8a3-f806a9cf3541",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Asking for the Publishing Time\n",
+        "height": 416,
+        "width": 688,
+        "color": "#9D9B5C"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2240,
+        -528
+      ],
+      "typeVersion": 1,
+      "id": "21c242e9-1543-4ff0-ade9-917fee7a0455",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {
+    "Send To Templated.io": [
+      {
+        "json": {
+          "id": "a1e4f04c-536b-4911-8a7d-9023bae031e4",
+          "width": 1080,
+          "height": 1080,
+          "url": "https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg",
+          "render_url": "https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg",
+          "storage_url": null,
+          "format": "jpg",
+          "status": "COMPLETED",
+          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
+          "templateName": "Insta",
+          "createdAt": "2026-07-26T08:47:42.357+00:00",
+          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
+          "name": "",
+          "page": "slide-1",
+          "externalId": null,
+          "removed": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "6ce879dd-0a78-425c-8a59-3c825f9d2bb7",
+          "width": 1080,
+          "height": 1080,
+          "url": "https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg",
+          "render_url": "https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg",
+          "storage_url": null,
+          "format": "jpg",
+          "status": "COMPLETED",
+          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
+          "templateName": "Insta",
+          "createdAt": "2026-07-26T08:47:42.387+00:00",
+          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
+          "name": "",
+          "page": "slide-2",
+          "externalId": null,
+          "removed": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "d8012da1-8455-43da-983c-552a212bedb2",
+          "width": 1080,
+          "height": 1080,
+          "url": "https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg",
+          "render_url": "https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg",
+          "storage_url": null,
+          "format": "jpg",
+          "status": "COMPLETED",
+          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
+          "templateName": "Insta",
+          "createdAt": "2026-07-26T08:47:42.395+00:00",
+          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
+          "name": "",
+          "page": "slide-3",
+          "externalId": null,
+          "removed": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "7b7f94e8-ee16-4990-8b6d-29db45b1d1fb",
+          "width": 1080,
+          "height": 1080,
+          "url": "https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg",
+          "render_url": "https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg",
+          "storage_url": null,
+          "format": "jpg",
+          "status": "COMPLETED",
+          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
+          "templateName": "Insta",
+          "createdAt": "2026-07-26T08:47:42.388+00:00",
+          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
+          "name": "",
+          "page": "slide-4",
+          "externalId": null,
+          "removed": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "4f355147-2579-4c3f-b483-a29604808bd4",
+          "width": 1080,
+          "height": 1080,
+          "url": "https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg",
+          "render_url": "https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg",
+          "storage_url": null,
+          "format": "jpg",
+          "status": "COMPLETED",
+          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
+          "templateName": "Insta",
+          "createdAt": "2026-07-26T08:47:42.394+00:00",
+          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
+          "name": "",
+          "page": "slide-5",
+          "externalId": null,
+          "removed": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Content": {
+      "main": [
+        [
+          {
+            "node": "Post Slides Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send To Templated.io": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Images URLs": {
+      "main": [
+        [
+          {
+            "node": "Comine URLs in an Array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Images URLs Ready For Sending": {
+      "main": [
+        [
+          {
+            "node": "Send a media group message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a media group message": {
+      "main": [
+        [
+          {
+            "node": "Approve Post?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If approved?": {
+      "main": [
+        [
+          {
+            "node": "Update The Post Status To Approved",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Post Slides Data": {
+      "main": [
+        [
+          {
+            "node": "Send To Templated.io",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Data to Insert": {
+      "main": [
+        [
+          {
+            "node": "Insert Post Slides",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Data to Insert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Get Images URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comine URLs in an Array": {
+      "main": [
+        [
+          {
+            "node": "Images URLs Ready For Sending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If approved?1": {
+      "main": [
+        [
+          {
+            "node": "Update Image Status To Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Image Status To Approved": {
+      "main": [
+        [
+          {
+            "node": "Call My Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve Post?": {
+      "main": [
+        [
+          {
+            "node": "If approved?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update The Post Status To Approved": {
+      "main": [
+        []
+      ]
+    },
+    "Insert Post Slides": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "97e1f63b-940a-46b2-8aec-b62f7c010639",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+  },
+  "nodeGroups": [],
+  "id": "fJOSUUOaKurYdZeY",
+  "tags": []
+}

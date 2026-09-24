@@ -1,0 +1,714 @@
+{
+  "name": "Publish or Schedule The Post- Sub-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "={{ $('Check the Date Format').item.json.errorMessage }}",
+        "responseType": "freeText",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4096,
+        176
+      ],
+      "id": "76735bd3-32bc-4cdb-840e-70f8a5401be7",
+      "name": "Error Message",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const userInput = $input.first().json.data.text;\n\n// نحاول نحوّل النص لتاريخ\nconst parsedDate = new Date(userInput.trim().replace(' ', 'T') + ':00');\n\nlet isValid = true;\nlet errorType = null;\nlet errorMessage = null;\n\nif (isNaN(parsedDate.getTime())) {\n  isValid = false;\n  errorType = 'bad_format';\n  errorMessage = '⚠️ Invalid format. Please send the date and time exactly in this format:\\nYYYY-MM-DD HH:mm\\nExample: 2026-09-20 18:00';\n} else if (parsedDate < new Date()) {\n  isValid = false;\n  errorType = 'past_date';\n  errorMessage = '⚠️ The date you sent is in the past. Please send a future date and time.';\n}\n\nreturn [\n  {\n    json: {\n      isValid: isValid,\n      errorType: errorType,\n      errorMessage: errorMessage,\n      scheduledTime: isValid ? parsedDate.toISOString() : null\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3728,
+        -48
+      ],
+      "id": "da7ec550-3bd1-4135-a2d8-f70c17d07404",
+      "name": "Check the Date Format"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2fa57f02-be66-4be5-a70e-934a024d2e0b",
+              "leftValue": "={{ $json.isValid }}",
+              "rightValue": "={{ now() }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3920,
+        -48
+      ],
+      "id": "19401134-a9fe-440f-b2ce-a2439d2d0aa4",
+      "name": "If Format IsValid?"
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ $('If Format IsValid?').first().json.scheduledTime }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4816,
+        -64
+      ],
+      "id": "ef32b75f-032e-41ce-96b1-3ac6d79b1afa",
+      "name": "Wait",
+      "webhookId": "31ea707a-61d7-49a6-a67b-eb2b2f7ca883"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "jJp5WIyBcYh3UsdO",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/jJp5WIyBcYh3UsdO",
+          "cachedResultName": "Publish Instagram Carousel- Sub-workflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $('Start').first().json.post_id }}"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        5008,
+        -64
+      ],
+      "id": "0ceced5a-f78d-4cb5-96df-29787bdf8b0b",
+      "name": "Call 'Publish Instagram Carousel-3'1"
+    },
+    {
+      "parameters": {
+        "chatId": "1206553714",
+        "text": "=✅ Post has been scheduled successfully! \nOn {{ $json.scheduledTime }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4640,
+        -64
+      ],
+      "id": "712cd2bc-cbe4-4f2e-883b-f12816de2771",
+      "name": "Scheduled successfully!",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e59ae9bf-db09-4726-b24c-deff11b9ed83",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "approve",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3280,
+        -224
+      ],
+      "id": "75713d7c-33ff-460d-9931-dcd6474fa823",
+      "name": "If Publish?"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "Publish Now or Schedule?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ Publish ",
+            "disapproveLabel": "📅 Schedule"
+          }
+        },
+        "chatApproval": true,
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3056,
+        -272
+      ],
+      "id": "88e90728-d525-4934-aa4f-bf8c72ef56cb",
+      "name": "Publish or Schedule?",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "post_id"
+            }
+          ]
+        }
+      },
+      "id": "d318a683-4e34-4b01-9428-00a2dbb5e91f",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        2848,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "jJp5WIyBcYh3UsdO",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/jJp5WIyBcYh3UsdO",
+          "cachedResultName": "Publish Instagram Carousel- Sub-workflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $('Start').first().json.post_id }}"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        4144,
+        -576
+      ],
+      "id": "e9e6e165-a89e-4da6-a0c8-72cf1a3c68fa",
+      "name": "Call 'Publish Instagram Carousel- Sub-workflow'",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "=Confirm on publishing now?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "chatApproval": true,
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3504,
+        -496
+      ],
+      "id": "d026cdd2-3546-4d82-a835-e199469753b2",
+      "name": "Confirming On Publishing",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "=Confirm on scheduling on {{ $json.scheduledTime }}?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "chatApproval": true,
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4208,
+        -48
+      ],
+      "id": "c60cebf5-75e3-403e-913e-724b2158af9d",
+      "name": "Confirming On Scheduling",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "317cce4b-0917-4f4d-820c-8c9746074404",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3712,
+        -496
+      ],
+      "id": "985ad060-2892-4274-8add-857abc9ed03e",
+      "name": "If Confirmed?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "317cce4b-0917-4f4d-820c-8c9746074404",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4400,
+        -48
+      ],
+      "id": "2d0bcadd-df92-4fec-84e5-a494c99cd5cf",
+      "name": "If Confirmed?1"
+    },
+    {
+      "parameters": {
+        "chatId": "1206553714",
+        "text": "⏳Wait, now your post is being published!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3920,
+        -576
+      ],
+      "id": "2bacd1af-d7ff-4aa3-b6ee-957c67c75c06",
+      "name": "Waiting Message for Publishing",
+      "webhookId": "5724e51d-0577-4e24-9886-859d02446148",
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1206553714",
+        "message": "When to schedule?\nPlease use this format: YYYY-MM-DD HH:mm",
+        "responseType": "freeText",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3488,
+        -48
+      ],
+      "id": "2819eacb-8787-4103-ae39-ed6c7f180840",
+      "name": "Specifying Date and Time To Schedule",
+      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Publishing Now\n",
+        "height": 352,
+        "width": 928,
+        "color": "#4C7B51"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3424,
+        -640
+      ],
+      "typeVersion": 1,
+      "id": "394472ed-c274-4238-a1d9-ba3397e73a53",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Scheduling the Post\n",
+        "height": 560,
+        "width": 1760,
+        "color": "#527384"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3424,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "849e9021-de6a-43ca-8ec2-ac375f6c281f",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Publish or Schedule?": {
+      "main": [
+        [
+          {
+            "node": "If Publish?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Publish?": {
+      "main": [
+        [
+          {
+            "node": "Confirming On Publishing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Specifying Date and Time To Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the Date Format": {
+      "main": [
+        [
+          {
+            "node": "If Format IsValid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Call 'Publish Instagram Carousel-3'1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Format IsValid?": {
+      "main": [
+        [
+          {
+            "node": "Confirming On Scheduling",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Message": {
+      "main": [
+        [
+          {
+            "node": "Check the Date Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled successfully!": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Publish or Schedule?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Publish Instagram Carousel- Sub-workflow'": {
+      "main": [
+        []
+      ]
+    },
+    "Confirming On Publishing": {
+      "main": [
+        [
+          {
+            "node": "If Confirmed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirming On Scheduling": {
+      "main": [
+        [
+          {
+            "node": "If Confirmed?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Confirmed?": {
+      "main": [
+        [
+          {
+            "node": "Waiting Message for Publishing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish or Schedule?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Confirmed?1": {
+      "main": [
+        [
+          {
+            "node": "Scheduled successfully!",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish or Schedule?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Waiting Message for Publishing": {
+      "main": [
+        [
+          {
+            "node": "Call 'Publish Instagram Carousel- Sub-workflow'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Specifying Date and Time To Schedule": {
+      "main": [
+        [
+          {
+            "node": "Check the Date Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9131bef6-b7d2-4799-b7ad-d3047d04b981",
+  "meta": {
+    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+  },
+  "nodeGroups": [],
+  "id": "FsP0BLyr2ZxvYEUu",
+  "tags": []
+}
