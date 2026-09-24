@@ -1,0 +1,984 @@
+{
+  "name": "Social Media Posts Generation-1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "672b8776-66ec-4ca8-bf84-b43672f3fc58",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-3.5-turbo",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        176
+      ],
+      "id": "583eb198-4054-4638-bcc6-4f3c041a6f91",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "xUohFESBjFXbGcgn",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        0
+      ],
+      "id": "937f63ab-78ef-4b89-9493-61799261a142",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-3.5-turbo",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        128
+      ],
+      "id": "9f5565b9-3014-4f70-910b-aec5f5d08289",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "xUohFESBjFXbGcgn",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get input data\nconst items = $input.all();\n\n// Normalize topics\nconst normalizedTopics = items.map((item) => {\n  return {\n    topic: item.json.title.trim(),\n    topic_id: item.json.id\n  };\n});\n\n// Return normalized data\nreturn normalizedTopics.map((topic) => ({\n  json: topic\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        0
+      ],
+      "id": "4a1fb581-0801-4eae-b5b1-dc821ad28ea5",
+      "name": "Normalization"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create an Instagram carousel about the following AI topic:\n\n{{ $json.topic }}\n\nFollow this exact 5-slide structure:\n\nSlide 1: Hook\n- Create an attention-grabbing opening.\n- Make it curiosity-driven and suitable for an AI audience.\n\nSlide 2: Definition\n- Explain what the AI concept is.\n- Keep it simple and beginner-friendly.\n\nSlide 3: Importance\n- Explain why this topic matters.\n- Mention its impact on AI development, businesses, or users.\n\nSlide 4: Usage\n- Explain how this technology is used in real-world scenarios.\n- Mention practical applications.\n\nSlide 5: Examples\n- Provide real examples, tools, companies, or use cases related to this topic.\n\nContent requirements:\n- Keep each slide concise.\n- Maximum 3 short sentences per slide.\n- Use clear, engaging language suitable for an Instagram carousel.\n- Avoid technical complexity unless necessary.\n- Make the content educational and visually friendly.\n\nReturn ONLY valid JSON.\nDo not include markdown, explanations, or extra text.\n\nUse this exact JSON structure:\n\n{\n  \"topic\": \"{{ $json.topic }}\",\n  \"carousel\": {\n    \"slide_1_hook\": {\n      \"title\": \"\",\n      \"content\": \"\"\n    },\n    \"slide_2_definition\": {\n      \"title\": \"\",\n      \"content\": \"\"\n    },\n    \"slide_3_importance\": {\n      \"title\": \"\",\n      \"content\": \"\"\n    },\n    \"slide_4_usage\": {\n      \"title\": \"\",\n      \"content\": \"\"\n    },\n    \"slide_5_examples\": {\n      \"title\": \"\",\n      \"content\": \"\"\n    }\n  },\n}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an AI Content Generation Agent specialized in creating educational Instagram carousel content about AI technologies and developer trends.  Your responsibility is to transform an AI topic into a simple, engaging, and beginner-friendly 5-slide Instagram carousel.  Carousel Structure:  Slide 1 — Hook Purpose: Capture attention and create curiosity about the topic. Requirements: - Use an engaging opening statement or question. - Make users want to continue reading.  Slide 2 — Definition Purpose: Explain what the concept is. Requirements: - Provide a simple and clear definition. - Avoid technical complexity.  Slide 3 — Importance Purpose: Explain why this topic matters. Requirements: - Highlight its value and impact. - Explain why developers and businesses care about it.  Slide 4 — Usage Purpose: Explain how people can use this technology. Requirements: - Provide practical use cases. - Focus on real-world applications.  Slide 5 — Examples Purpose: Provide real-world examples. Requirements: - Mention tools, frameworks, companies, or applications related to the topic.  Content Rules: 1. Create exactly 5 slides. 2. Each slide must have a short title and concise content. 3. Keep the language simple and beginner-friendly. 4. Avoid unnecessary technical details. 5. Make the content educational and engaging. 6. Use a style suitable for Instagram carousel posts. 7. Do not add introductions, conclusions, or explanations outside the carousel."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1056,
+        16
+      ],
+      "id": "bacf9dc8-ead9-4d23-87d2-c9f82b269985",
+      "name": "Post Content Generation"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = JSON.parse($json.text);\n\nreturn [\n  {\n    json: {\n      topic: data.topic,\n      slide_1: data.carousel.slide_1_hook,\n      slide_2: data.carousel.slide_2_definition,\n      slide_3: data.carousel.slide_3_importance,\n      slide_4: data.carousel.slide_4_usage,\n      slide_5: data.carousel.slide_5_examples,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        16
+      ],
+      "id": "66aa1cd4-6fb6-4581-b1b2-c0954df59cc7",
+      "name": "Normalization1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create an Instagram caption for this AI carousel.\n\nTopic:\n{{ $json.topic }}\n\nCarousel Content:\n\nSlide 1:\n{{ $json.slide_1.title }}\n{{ $json.slide_1.content }}\n\nSlide 2:\n{{ $json.slide_2.title }}\n{{ $json.slide_2.content }}\n\nSlide 3:\n{{ $json.slide_3.title }}\n{{ $json.slide_3.content }}\n\nSlide 4:\n{{ $json.slide_4.title }}\n{{ $json.slide_4.content }}\n\nSlide 5:\n{{ $json.slide_5.title }}\n{{ $json.slide_5.content }}\n\n\nReturn the caption using this exact JSON structure:\n\n{\n  \"topic\": {{ $json.topic }},\n  \"caption\": {\n    \"hook\": \"\",\n    \"body\": \"\",\n    \"cta\": \"\",\n    \"full_caption\": \"\"\n  },\n  \"hashtags\": {\n    \"primary\": [],\n    \"topic_specific\": [],\n    \"community\": [],\n    \"all_hashtags\": []\n  },\n  \"posting_strategy\": {\n    \"best_time\": \"\",\n    \"target_audience\": \"\",\n    \"engagement_question\": \"\"\n  }\n}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an expert Instagram content strategist specializing in AI, technology, and educational content.  Your role is to create high-quality Instagram captions for AI educational carousel posts.  You understand: - Instagram content strategy - Audience engagement psychology - AI and technology communication - SEO-friendly captions - Hashtag optimization  Your goal: Create captions that educate, attract attention, encourage interaction, and increase reach.  Caption Requirements:  1. Hook (First Line): - Start with a powerful attention-grabbing sentence. - Make users stop scrolling. - Use curiosity, a question, surprising fact, or bold statement.  2. Introduction: - Briefly introduce the AI topic. - Explain why the audience should care. - Connect the topic to real-world impact.  3. Educational Value: - Summarize the key insight from the carousel. - Add additional value without repeating all slides. - Keep it simple and beginner-friendly.  4. Engagement CTA: Include a clear call-to-action such as: - Ask a question - Encourage comments - Invite users to save or share - Encourage following for more AI content  5. Hashtags: Generate relevant Instagram hashtags: - Mix broad hashtags and niche hashtags. - Include AI industry keywords. - Avoid spammy or unrelated hashtags. - Use 8-15 hashtags maximum.  Hashtag categories: - General AI (#AI, #ArtificialIntelligence) - Topic-specific hashtags - Technology hashtags - Learning/community hashtags  Writing Style: - Professional but friendly. - Educational and engaging. - Suitable for AI enthusiasts, students, developers, and business audiences. - Use emojis naturally (not excessively). - Avoid clickbait or misleading claims.  Return ONLY valid JSON. Do not include markdown or explanations."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1536,
+        16
+      ],
+      "id": "1750f6f1-fde0-457b-b20f-20363b67fcc0",
+      "name": "Caption Generation"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse JSON response from AI agent\nconst data = JSON.parse($json.text);\n\nreturn [\n  {\n    json: {\n      topic: data.topic || null,\n\n      caption: {\n        hook: data.caption.hook,\n        body: data.caption.body,\n        cta: data.caption.cta,\n        full_caption: data.caption.full_caption\n      },\n\n      hashtags: {\n        primary: data.hashtags.primary,\n        topic_specific: data.hashtags.topic_specific,\n        community: data.hashtags.community,\n        all_hashtags: data.hashtags.all_hashtags\n      },\n\n    \n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        16
+      ],
+      "id": "6ef86b8c-d2fc-489b-8c22-9599b0285437",
+      "name": "Normalization2"
+    },
+    {
+      "parameters": {
+        "chatId": "1206553714",
+        "text": "={{\n`🤖 *AI Minute — New Post Draft*\n\n📌 *Topic:*\n${$json.topic}\n\n━━━━━━━━━━━━━━━━━━\n\n📝 *Caption*\n\n🔹 *Hook:*\n${$json.caption.caption.hook}\n\n🔹 *Body:*\n${$json.caption.caption.body}\n\n🔹 *CTA:*\n${$json.caption.caption.cta}\n\n━━━━━━━━━━━━━━━━━━\n\n#️⃣ *Hashtags*\n${$json.caption.hashtags.all_hashtags.join(' ')}\n\n━━━━━━━━━━━━━━━━━━\n\n🎨 *Carousel Slides*\n\n${$json.slides_content.slides.map((slide, index) => \n`\n🖼 *Slide ${index + 1}*\n\n*${slide.title}*\n\n${slide.content}\n\n━━━━━━━━━━━━━━━━━━\n`\n).join('')}\n`\n}}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "=✅ Approve",
+                    "additionalFields": {
+                      "callback_data": "=approve_{{ $json.id }}"
+                    }
+                  },
+                  {
+                    "text": "=Reject",
+                    "additionalFields": {
+                      "callback_data": "=reject_{{ $json.id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2416,
+        16
+      ],
+      "id": "d7e45df6-11d2-4ebe-bfc9-ad5b69d44e97",
+      "name": "Send Post for Approval",
+      "webhookId": "e3f84dcb-ab8a-4a76-90e5-ef691f720282",
+      "credentials": {
+        "telegramApi": {
+          "id": "OT174RLhglzO75Vm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "post_topics",
+          "mode": "list",
+          "cachedResultName": "post_topics"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        320,
+        0
+      ],
+      "id": "5da8888a-deba-4c19-a94a-4be106128853",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "users",
+          "mode": "list",
+          "cachedResultName": "users"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telegram_id": 0
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telegram_id",
+              "displayName": "telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram_account_id",
+              "displayName": "instagram_account_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timezone",
+              "displayName": "timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        160,
+        0
+      ],
+      "id": "359b9999-2999-4fd8-9aa2-eb3adeb67cb6",
+      "name": "Insert the user",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "posts",
+          "mode": "list",
+          "cachedResultName": "posts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "topic": "={{ $json.topic }}",
+            "status": "draft",
+            "topic_id": "={{ $json.topic_id }}",
+            "created_at": "={{ $now }}",
+            "user_id": "31b6e72d-4641-413e-aa60-f0947b0615c8"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "caption",
+              "displayName": "caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "publish_at",
+              "displayName": "publish_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "instagram_post_id",
+              "displayName": "instagram_post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_id",
+              "displayName": "topic_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        896,
+        16
+      ],
+      "id": "c937ecf6-db58-48ec-bea1-6afc6bafdc9e",
+      "name": "Insert Post Title",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "posts",
+          "mode": "list",
+          "cachedResultName": "posts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "caption": "={{ $json }}",
+            "id": "={{ $node[\"Insert Post Title\"].json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "caption",
+              "displayName": "caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "publish_at",
+              "displayName": "publish_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram_post_id",
+              "displayName": "instagram_post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_id",
+              "displayName": "topic_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2032,
+        16
+      ],
+      "id": "6b7e6cc0-74d6-4adf-b4dc-d5c9d33796a8",
+      "name": "Add Caption to DB",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "posts",
+          "mode": "list",
+          "cachedResultName": "posts"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "caption": "={}",
+            "id": "={{ $node[\"Insert Post Title\"].json.id }}",
+            "slides_content": "={{ \nJSON.stringify({\n  slides: [\n    {\n      title: $json.slide_1.title,\n      content: $json.slide_1.content\n    },\n    {\n      title: $json.slide_2.title,\n      content: $json.slide_2.content\n    },\n    {\n      title: $json.slide_3.title,\n      content: $json.slide_3.content\n    },\n    {\n      title: $json.slide_4.title,\n      content: $json.slide_4.content\n    },\n    {\n      title: $json.slide_5.title,\n      content: $json.slide_5.content\n    }\n  ]\n})\n}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "topic",
+              "displayName": "topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "publish_at",
+              "displayName": "publish_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram_post_id",
+              "displayName": "instagram_post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "topic_id",
+              "displayName": "topic_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slides_content",
+              "displayName": "slides_content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "caption",
+              "displayName": "caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1600,
+        -160
+      ],
+      "id": "f55dd861-f23f-4cbb-8547-28e6c2009324",
+      "name": "Add Post Content to DB",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "posts",
+          "mode": "list",
+          "cachedResultName": "posts"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $node[\"Insert Post Title\"].json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2224,
+        16
+      ],
+      "id": "54c3624b-fc4c-462f-ae2f-567c4f566937",
+      "name": "Get Post's Data",
+      "credentials": {
+        "postgres": {
+          "id": "uyPh0H9emHW8XFV6",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "**Post Generation**\n- Content Generation\n- Caption Generation",
+        "height": 576,
+        "width": 960,
+        "color": "#7F437A"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "cf06acbc-70c4-43b7-81a6-19b1d57e5f0d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "**Sending Post Content To Approval**\n",
+        "height": 544,
+        "width": 736,
+        "color": "#947A8D"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1840,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "863ef94b-a29a-4090-8889-2d0409fca5af",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Insert the user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Post Content Generation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Insert Post Title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Caption Generation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalization": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Content Generation": {
+      "main": [
+        [
+          {
+            "node": "Normalization1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalization1": {
+      "main": [
+        [
+          {
+            "node": "Add Post Content to DB",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Caption Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Caption Generation": {
+      "main": [
+        [
+          {
+            "node": "Normalization2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalization2": {
+      "main": [
+        [
+          {
+            "node": "Add Caption to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert the user": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Post Title": {
+      "main": [
+        [
+          {
+            "node": "Post Content Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Caption to DB": {
+      "main": [
+        [
+          {
+            "node": "Get Post's Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Post Content to DB": {
+      "main": [
+        []
+      ]
+    },
+    "Send Post for Approval": {
+      "main": [
+        []
+      ]
+    },
+    "Get Post's Data": {
+      "main": [
+        [
+          {
+            "node": "Send Post for Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "43bce263-f38b-43a9-9e33-0f53abed71af",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+  },
+  "nodeGroups": [],
+  "id": "GAb0mM9TTKwzpSpv",
+  "tags": []
+}
