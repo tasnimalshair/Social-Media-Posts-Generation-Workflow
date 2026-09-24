@@ -35,13 +35,13 @@
             {
               "id": "ea876e71-e338-4007-8e47-a63d0e37c959",
               "name": "ig_user_id",
-              "value": "17841445670166442",
+              "value": "YOUR_INSTAGRAM_USER_ID",
               "type": "string"
             },
             {
               "id": "3ea8f113-6d3e-4bdf-99b5-5184744e78c0",
               "name": "access_token",
-              "value": "EAAY5IrKp6eYBSductexb6XTGDZB7UosA4z97C08iFmRBuSs23kh2LNzR3O0SbWZAsImkzImXMXFTM02cOKHpV28U3GYhXRydNrOUT4IEZCOs1xeQLGM0h7Rj2u7vUzZAYAkBh9qkAPrYARWPzVJOJ5dacaZB1ID3TkkpZCM2TIY1pj45Q2gTVlvzZCZCWDfIEAZDZD",
+              "value": "YOUR_ACCESS_TOKEN",
               "type": "string"
             },
             {
@@ -76,7 +76,7 @@
       ],
       "id": "923a54d8-f237-4dcf-9cdc-cb0bcbc21ff2",
       "name": "Wait",
-      "webhookId": "bfa4096f-2342-43fc-8693-fedcfea6016a"
+      "webhookId": "YOUR_WEBHOOK_ID"
     },
     {
       "parameters": {
@@ -179,7 +179,7 @@
       "name": "Create the Post",
       "credentials": {
         "facebookGraphApi": {
-          "id": "o3MO96PYMcmYD3zm",
+          "id": "YOUR_FACEBOOK_CREDENTIAL_ID",
           "name": "Facebook Graph account 2"
         }
       }
@@ -211,7 +211,7 @@
       "name": "Publish the Post on Instagram",
       "credentials": {
         "facebookGraphApi": {
-          "id": "o3MO96PYMcmYD3zm",
+          "id": "YOUR_FACEBOOK_CREDENTIAL_ID",
           "name": "Facebook Graph account 2"
         }
       }
@@ -251,7 +251,7 @@
       "name": "Get the Post",
       "credentials": {
         "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
           "name": "Postgres account"
         }
       },
@@ -259,7 +259,7 @@
     },
     {
       "parameters": {
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "text": "=🎉 Your post \"{{ $('Get the Post').first().json.topic }}\" is live!  \nThe carousel just went up on your Instagram — go check it out!📸 ",
         "additionalFields": {
           "appendAttribution": false
@@ -273,10 +273,10 @@
       ],
       "id": "f67830ed-7c90-45c5-8884-07497080c281",
       "name": "Publishing Done!",
-      "webhookId": "44eef654-206a-4090-a3f5-55266768c807",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_TELEGRAM_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -319,7 +319,7 @@
       "alwaysOutputData": true,
       "credentials": {
         "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
           "name": "Postgres account"
         }
       }
@@ -426,7 +426,7 @@
       "name": "Add the Creation ID to the Slide",
       "credentials": {
         "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
           "name": "Postgres account"
         }
       }
@@ -466,7 +466,7 @@
       "name": "Get the Post Slides",
       "credentials": {
         "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
           "name": "Postgres account"
         }
       }
@@ -666,9 +666,9 @@
   "versionId": "98937613-2f02-41d0-accc-e88a85c42689",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+    "instanceId": "YOUR_INSTANCE_ID"
   },
   "nodeGroups": [],
-  "id": "jJp5WIyBcYh3UsdO",
+  "id": "YOUR_SUBWORKFLOW_ID",
   "tags": []
 }
