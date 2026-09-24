@@ -15,14 +15,7 @@
         -352
       ],
       "id": "bc6f8557-38f2-49e4-ae40-17206bf182b0",
-      "name": "Telegram Trigger",
-      "webhookId": "22a15e01-b875-4063-bafd-a2816222c89b",
-      "credentials": {
-        "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
-          "name": "Telegram account"
-        }
-      }
+      "name": "Telegram Trigger"
     },
     {
       "parameters": {
@@ -40,7 +33,7 @@
     {
       "parameters": {
         "operation": "sendMediaGroup",
-        "chatId": "1206553714",
+        "chatId": "<TELEGRAM_CHAT_ID>",
         "media": {
           "media": [
             {
@@ -58,14 +51,7 @@
         -352
       ],
       "id": "873e5303-9de9-4b9d-bede-45f45c2c8faf",
-      "name": "Send a media group message",
-      "webhookId": "a6dac8b9-aa6a-439f-8eb7-3fdc279b4db2",
-      "credentials": {
-        "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
-          "name": "Telegram account"
-        }
-      }
+      "name": "Send a media group message"
     },
     {
       "parameters": {
@@ -76,7 +62,7 @@
           "parameters": [
             {
               "name": "Authorization  ",
-              "value": "Bearer 48a22f8c-38f7-4a42-96fa-213823beabfd"
+              "value": "Bearer <TEMPLATED_API_KEY>"
             },
             {
               "name": "Content-Type  ",
@@ -310,13 +296,7 @@
         -480
       ],
       "id": "77c61f30-66b3-4d18-8c9e-eb50e9181b72",
-      "name": "Update Image Status To Approved",
-      "credentials": {
-        "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
-          "name": "Postgres account"
-        }
-      }
+      "name": "Update Image Status To Approved"
     },
     {
       "parameters": {
@@ -355,7 +335,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "<TELEGRAM_CHAT_ID>",
         "message": "🎨 Design Preview Ready\n\nApprove this post?",
         "approvalOptions": {
           "values": {
@@ -375,22 +355,15 @@
       ],
       "id": "40cb2c8a-9337-4b28-848a-73bb766efde2",
       "name": "Approve Post?",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
-      "executeOnce": true,
-      "credentials": {
-        "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
-          "name": "Telegram account"
-        }
-      }
+      "executeOnce": true
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "FsP0BLyr2ZxvYEUu",
+          "value": "<SUB_WORKFLOW_ID>",
           "mode": "list",
-          "cachedResultUrl": "/workflow/FsP0BLyr2ZxvYEUu",
+          "cachedResultUrl": "/workflow/<SUB_WORKFLOW_ID>",
           "cachedResultName": "Publish or Schedule The Post- Sub-workflow"
         },
         "workflowInputs": {
@@ -555,13 +528,7 @@
         -512
       ],
       "id": "4a1fe1d8-400e-4eaf-a42f-a5c37cc72895",
-      "name": "Update The Post Status To Approved",
-      "credentials": {
-        "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
-          "name": "Postgres account"
-        }
-      }
+      "name": "Update The Post Status To Approved"
     },
     {
       "parameters": {
@@ -647,13 +614,7 @@
         -544
       ],
       "id": "1df42517-8606-4e84-af96-0bca09add698",
-      "name": "Insert Post Slides",
-      "credentials": {
-        "postgres": {
-          "id": "uyPh0H9emHW8XFV6",
-          "name": "Postgres account"
-        }
-      }
+      "name": "Insert Post Slides"
     },
     {
       "parameters": {
@@ -720,125 +681,6 @@
       "name": "Sticky Note3"
     }
   ],
-  "pinData": {
-    "Send To Templated.io": [
-      {
-        "json": {
-          "id": "a1e4f04c-536b-4911-8a7d-9023bae031e4",
-          "width": 1080,
-          "height": 1080,
-          "url": "https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg",
-          "render_url": "https://cdn.templated.media/render/a1e4f04c-536b-4911-8a7d-9023bae031e4.jpg",
-          "storage_url": null,
-          "format": "jpg",
-          "status": "COMPLETED",
-          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
-          "templateName": "Insta",
-          "createdAt": "2026-07-26T08:47:42.357+00:00",
-          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
-          "name": "",
-          "page": "slide-1",
-          "externalId": null,
-          "removed": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "6ce879dd-0a78-425c-8a59-3c825f9d2bb7",
-          "width": 1080,
-          "height": 1080,
-          "url": "https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg",
-          "render_url": "https://cdn.templated.media/render/6ce879dd-0a78-425c-8a59-3c825f9d2bb7.jpg",
-          "storage_url": null,
-          "format": "jpg",
-          "status": "COMPLETED",
-          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
-          "templateName": "Insta",
-          "createdAt": "2026-07-26T08:47:42.387+00:00",
-          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
-          "name": "",
-          "page": "slide-2",
-          "externalId": null,
-          "removed": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "d8012da1-8455-43da-983c-552a212bedb2",
-          "width": 1080,
-          "height": 1080,
-          "url": "https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg",
-          "render_url": "https://cdn.templated.media/render/d8012da1-8455-43da-983c-552a212bedb2.jpg",
-          "storage_url": null,
-          "format": "jpg",
-          "status": "COMPLETED",
-          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
-          "templateName": "Insta",
-          "createdAt": "2026-07-26T08:47:42.395+00:00",
-          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
-          "name": "",
-          "page": "slide-3",
-          "externalId": null,
-          "removed": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "7b7f94e8-ee16-4990-8b6d-29db45b1d1fb",
-          "width": 1080,
-          "height": 1080,
-          "url": "https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg",
-          "render_url": "https://cdn.templated.media/render/7b7f94e8-ee16-4990-8b6d-29db45b1d1fb.jpg",
-          "storage_url": null,
-          "format": "jpg",
-          "status": "COMPLETED",
-          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
-          "templateName": "Insta",
-          "createdAt": "2026-07-26T08:47:42.388+00:00",
-          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
-          "name": "",
-          "page": "slide-4",
-          "externalId": null,
-          "removed": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      },
-      {
-        "json": {
-          "id": "4f355147-2579-4c3f-b483-a29604808bd4",
-          "width": 1080,
-          "height": 1080,
-          "url": "https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg",
-          "render_url": "https://cdn.templated.media/render/4f355147-2579-4c3f-b483-a29604808bd4.jpg",
-          "storage_url": null,
-          "format": "jpg",
-          "status": "COMPLETED",
-          "templateId": "6842ac17-e2f9-49ea-919e-c6adea8b8a29",
-          "templateName": "Insta",
-          "createdAt": "2026-07-26T08:47:42.394+00:00",
-          "payload": "{\"template\":\"6842ac17-e2f9-49ea-919e-c6adea8b8a29\",\"layers\":{\"hook\":{\"text\":\"=Unlock the Power of RAG!\"},\"title_1\":{\"text\":\"=What is RAG?\"},\"body_1\":{\"text\":\"=RAG, or Retrieval-Augmented Generation, combines the strengths of information retrieval and natural language generation in AI text generation.\"},\"title_2\":{\"text\":\"=Why RAG Matters\"},\"body_2\":{\"text\":\"=RAG revolutionizes content creation, making it more accurate and context-aware, benefiting businesses in producing high-quality text at scale.\"},\"title_3\":{\"text\":\"=Practical Uses of RAG\"},\"body_3\":{\"text\":\"=RAG is used in chatbots for more human-like interactions, content creation for websites, and generating personalized recommendations.\"},\"title_4\":{\"text\":\"=Examples of RAG in Action\"},\"body_4\":{\"text\":\"=Tools like DPR, DPR-Context, and RAG-Script showcase RAG's capabilities in enhancing search engines and creating engaging content.\"}}}",
-          "name": "",
-          "page": "slide-5",
-          "externalId": null,
-          "removed": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
   "connections": {
     "Telegram Trigger": {
       "main": [
@@ -1046,12 +888,9 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "97e1f63b-940a-46b2-8aec-b62f7c010639",
   "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+    "templateCredsSetupCompleted": true
   },
   "nodeGroups": [],
-  "id": "fJOSUUOaKurYdZeY",
   "tags": []
 }
