@@ -4,7 +4,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "message": "={{ $('Check the Date Format').item.json.errorMessage }}",
         "responseType": "freeText",
         "options": {
@@ -19,11 +19,11 @@
       ],
       "id": "76735bd3-32bc-4cdb-840e-70f8a5401be7",
       "name": "Error Message",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -88,15 +88,15 @@
       ],
       "id": "ef32b75f-032e-41ce-96b1-3ac6d79b1afa",
       "name": "Wait",
-      "webhookId": "31ea707a-61d7-49a6-a67b-eb2b2f7ca883"
+      "webhookId": "YOUR_WEBHOOK_ID"
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "jJp5WIyBcYh3UsdO",
+          "value": "YOUR_SUBWORKFLOW_ID",
           "mode": "list",
-          "cachedResultUrl": "/workflow/jJp5WIyBcYh3UsdO",
+          "cachedResultUrl": "/workflow/YOUR_SUBWORKFLOW_ID",
           "cachedResultName": "Publish Instagram Carousel- Sub-workflow"
         },
         "workflowInputs": {
@@ -137,7 +137,7 @@
     },
     {
       "parameters": {
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "text": "=✅ Post has been scheduled successfully! \nOn {{ $json.scheduledTime }}",
         "additionalFields": {}
       },
@@ -149,11 +149,11 @@
       ],
       "id": "712cd2bc-cbe4-4f2e-883b-f12816de2771",
       "name": "Scheduled successfully!",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -195,7 +195,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "message": "Publish Now or Schedule?",
         "approvalOptions": {
           "values": {
@@ -217,11 +217,11 @@
       ],
       "id": "88e90728-d525-4934-aa4f-bf8c72ef56cb",
       "name": "Publish or Schedule?",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -249,9 +249,9 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "jJp5WIyBcYh3UsdO",
+          "value": "YOUR_SUBWORKFLOW_ID",
           "mode": "list",
-          "cachedResultUrl": "/workflow/jJp5WIyBcYh3UsdO",
+          "cachedResultUrl": "/workflow/YOUR_SUBWORKFLOW_ID",
           "cachedResultName": "Publish Instagram Carousel- Sub-workflow"
         },
         "workflowInputs": {
@@ -295,7 +295,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "message": "=Confirm on publishing now?",
         "approvalOptions": {
           "values": {
@@ -315,11 +315,11 @@
       ],
       "id": "d026cdd2-3546-4d82-a835-e199469753b2",
       "name": "Confirming On Publishing",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -327,7 +327,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "message": "=Confirm on scheduling on {{ $json.scheduledTime }}?",
         "approvalOptions": {
           "values": {
@@ -347,11 +347,11 @@
       ],
       "id": "c60cebf5-75e3-403e-913e-724b2158af9d",
       "name": "Confirming On Scheduling",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -426,7 +426,7 @@
     },
     {
       "parameters": {
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "text": "⏳Wait, now your post is being published!",
         "additionalFields": {
           "appendAttribution": false
@@ -440,10 +440,10 @@
       ],
       "id": "2bacd1af-d7ff-4aa3-b6ee-957c67c75c06",
       "name": "Waiting Message for Publishing",
-      "webhookId": "5724e51d-0577-4e24-9886-859d02446148",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -451,7 +451,7 @@
     {
       "parameters": {
         "operation": "sendAndWait",
-        "chatId": "1206553714",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
         "message": "When to schedule?\nPlease use this format: YYYY-MM-DD HH:mm",
         "responseType": "freeText",
         "options": {
@@ -466,11 +466,11 @@
       ],
       "id": "2819eacb-8787-4103-ae39-ed6c7f180840",
       "name": "Specifying Date and Time To Schedule",
-      "webhookId": "5ec4e410-edd8-458d-824c-d3476f04dcab",
+      "webhookId": "YOUR_WEBHOOK_ID",
       "executeOnce": true,
       "credentials": {
         "telegramApi": {
-          "id": "OT174RLhglzO75Vm",
+          "id": "YOUR_CREDENTIAL_ID",
           "name": "Telegram account"
         }
       }
@@ -706,9 +706,9 @@
   },
   "versionId": "9131bef6-b7d2-4799-b7ad-d3047d04b981",
   "meta": {
-    "instanceId": "1762b09f3b0deb78af55c98c154f566ec611617ddd7d8c2d0ec308d4c307fc51"
+    "instanceId": "YOUR_INSTANCE_ID"
   },
   "nodeGroups": [],
-  "id": "FsP0BLyr2ZxvYEUu",
+  "id": "YOUR_WORKFLOW_ID",
   "tags": []
 }
