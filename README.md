@@ -1,143 +1,92 @@
-# AI Minute 🚀
+# AI-Powered Social Media Content Automation
 
-An AI-powered content automation system that discovers trending AI topics, generates educational Instagram carousel posts, creates branded designs, and publishes approved content automatically using **n8n** and **LLMs**.
+An end-to-end AI automation system built with **n8n, LLMs, Telegram, Templated.io, and Instagram**.
 
----
+## Overview
 
-## 📌 Overview
+This project automates the complete social media content creation and publishing pipeline, from topic selection and AI-powered research to content generation, visual design, human approval, scheduling, and Instagram publishing.
 
-AI Minute automates the end-to-end workflow of creating educational AI content for Instagram. Instead of manually researching topics, writing posts, designing carousels, and scheduling publications, the system uses AI agents and workflow automation to streamline the entire process while keeping a human approval step before publishing.
+The system uses multiple interconnected n8n workflows to orchestrate the process while keeping a **Human-in-the-Loop** approval step before publishing.
 
----
+## Tech Stack
 
-## 🎯 Problem
+- **n8n** — Workflow orchestration and automation
+- **LLMs / OpenAI API** — AI-powered research and content generation
+- **Telegram Bot API** — Human approval and workflow control
+- **Templated.io** — Automated visual content generation
+- **Instagram Graph API** — Automated publishing
+- **Webhooks** — Event-driven workflow communication
+- **HTTP APIs** — External service integrations
 
-Creating high-quality educational content requires continuous research, writing, designing, and publishing. This process is time-consuming, repetitive, and difficult to scale.
+## Workflow Architecture
 
----
+The automation is divided into several interconnected workflows:
 
-## 💡 Solution
+### 1. Daily Topic & Research
 
-The system automates the complete content creation pipeline by:
+- Selects a new topic
+- Passes the information to the content generation stage
 
-- Discovering trending AI topics
-- Selecting educational and relevant content
-- Avoiding duplicate topics
-- Generating Instagram carousel content
-- Writing engaging captions
-- Creating branded carousel designs using Canva
-- Requesting human approval via Telegram
-- Publishing approved posts automatically to Instagram
+### 2. Content & Caption Generation
 
----
+- Generates social media content using LLMs
+- Creates captions and supporting text
+- Structures the output for downstream automation
 
-## ⚙️ High-Level Workflow
+### 3. Telegram Approval
+
+- Sends the generated content for human review
+- Provides an approval checkpoint before publishing
+- Routes approved content to the next stage of the workflow
+
+### 4. Visual Content Generation
+
+- Sends structured content to Templated.io
+- Automatically generates the required visual assets
+- Passes the generated assets to the publishing workflow
+
+### 5. Telegram Approval
+
+- Allows the user to approve the design or request changes
+- Continues to the publishing workflow only after design approval
+
+### 5. Instagram Scheduling And Publishing
+
+- Processes the approved content and visual assets
+- Prepares the final Instagram post
+- Schedules or publishes the content through the Instagram Graph API
+
+## Key Features
+
+- End-to-end AI-powered content automation
+- Multi-workflow orchestration using n8n
+- Human-in-the-Loop approval
+- LLM-based research and content generation
+- Automated caption generation
+- Automated visual content generation
+- API integrations across multiple services
+- Automated Instagram publishing
+- Reduced repetitive manual work
+- Modular and extensible workflow architecture
+
+## Project Impact
+
+The workflow reduced the social media post preparation process from **3+ hours of manual work to seconds** once the required approval is provided.
+
+The automation replaces a repetitive multi-step process with an integrated pipeline:
+
+## 🔄 Automation Workflow
 
 ```mermaid
 flowchart TD
-    A[Daily Trigger]
-    --> B[AI Research]
-    --> C[Topic Selection]
-    --> D[Content Generation]
-    --> E[Caption Generation]
-    --> F[Telegram Approval]
-    --> G[Canva Automation]
-    --> H[Design Approval]
-    --> I[Publishing Queue]
-    --> J[Instagram Publishing]
+    A([Daily Trigger]) --> B[Topic Selection]
+    B --> C[AI Content Generation]
+    C --> D[AI Caption Generation]
+    D --> E{Telegram Approval<br/>Content & Caption}
+    E -->|Approved| F[Templated.io<br/>Automated Design]
+    E -->|Rejected| C
+    F --> G{Telegram Approval<br/>Design}
+    G -->|Approved| H[Publishing Scheduling]
+    G -->|Rejected| F
+    H --> I([Instagram Publishing])
 ```
----
-
-## 🧩 System Components
-
-| Component | Responsibility |
-|----------|----------------|
-| AI Research Agent | Discover trending AI topics from trusted sources |
-| Topic Selection Agent | Select valuable educational topics and prevent duplicates |
-| Content Memory | Store published topics in Airtable |
-| Content Generation Agent | Generate a 5-slide Instagram carousel |
-| Caption Generation Agent | Generate engaging captions with CTA |
-| Telegram Approval | Human review before publishing |
-| Canva Automation | Generate branded carousel designs |
-| Publishing Queue | Schedule and publish approved content |
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|--------|------------|
-| Workflow Automation | n8n |
-| AI Models | GPT / Gemini |
-| Research | Web Search APIs + RSS |
-| Database | Airtable |
-| Communication | Telegram Bot API |
-| Design | Canva API |
-| Publishing | Instagram Graph API |
-
----
-
-## ✅ MVP Features
-
-- AI topic discovery
-- Trend analysis
-- Duplicate topic detection
-- Educational carousel generation
-- Caption generation
-- Telegram approval workflow
-- Canva design automation
-- Instagram scheduling and publishing
-
----
-
-## 🚀 Future Improvements
-
-- Multi-platform publishing
-- AI-generated videos
-- Analytics dashboard
-- Performance feedback loop
-- Personalized content strategy
-- Vector database for semantic memory
-
----
-
-## 📊 Success Metrics
-
-- Reduced manual content creation time
-- High approval rate
-- Reliable publishing workflow
-- Consistent educational content quality
-- Diverse and non-duplicated AI topics
-
----
-
-## 📁 Project Structure
-
-```
-AI-Minute/
-│
-├── workflows/
-│   └── n8n workflow
-│
-├── docs/
-│   ├── Design_Document.md
-│   └── Tech_Spec.md
-│
-├── assets/
-│
-└── README.md
-```
-
----
-
-## 👤 Author
-
-**Tasnim Alshair**  
-AI Automation Engineer
-🔗 LinkedIn: [Tasnim Alshair](https://www.linkedin.com/in/tasnim-alshair-aa11a4266)
-
----
-
-## 📄 License
-
-This project is intended for educational and portfolio purposes.
